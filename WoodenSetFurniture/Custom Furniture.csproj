@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{38008663-9ED5-4D52-9C2A-DC8BB13444B8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Custom_Furniture</RootNamespace>
+    <AssemblyName>Custom Furniture</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="0Harmony" />
+    <Reference Include="Assembly-CSharp" />
+    <Reference Include="Assembly-CSharp-firstpass" />
+    <Reference Include="System.Core" />
+    <Reference Include="UnityEngine.CoreModule" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Artable_OnSpawn_Patch.cs" />
+    <Compile Include="CozyBedConfig.cs" />
+    <Compile Include="CozyBed_Patch\CozyBed_TechPatch\CozyBedTechMod.cs" />
+    <Compile Include="CozyBed_Patch\CozyBed_UIPatch\CozyBedUI.cs" />
+    <Compile Include="INTERNALSTRINGS.cs" />
+    <Compile Include="KitchenHoodConfig.cs" />
+    <Compile Include="KitchenHood_Patch\KitchenHood_TechPatch\KitchenHoodTechMod.cs" />
+    <Compile Include="KitchenHood_Patch\KitchenHood_UIPatch\KitchenHoodUI.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelectiveFurniture.cs" />
+    <Compile Include="ShelfWood_Patch\ShelfWood_TechPatch\ShelfWoodTechMod.cs" />
+    <Compile Include="ShelfWood_Patch\ShelfWood_UIPatch\ShelfWoodUI.cs" />
+    <Compile Include="SimpleFireplaceConfig.cs" />
+    <Compile Include="SimpleFireplace_Patch\SimpleFireplace_UIPatch\SimpleFireplaceUI.cs" />
+    <Compile Include="SingleChairConfig.cs" />
+    <Compile Include="SingleChair_Patch\SingleChair_TechPatch\SingleChairTechMod.cs" />
+    <Compile Include="SingleChair_Patch\SingleChair_UIPatch\SingleChairUI.cs" />
+    <Compile Include="TableWoodConfig.cs" />
+    <Compile Include="TableWood_Patch\TableWood_TechPatch\TableWoodTechMod.cs" />
+    <Compile Include="TableWood_Patch\TableWood_UIPatch\TableWoodUI.cs" />
+    <Compile Include="WoodenBedConfig.cs" />
+    <Compile Include="WoodenBed_Patch\WoodenBed_TechPatch\WoodenBedTechMod.cs" />
+    <Compile Include="WoodenBed_Patch\WoodenBed_UIPatch\WoodenBedUI.cs" />
+    <Compile Include="WoodenPedestalConfig.cs" />
+    <Compile Include="WoodenPedestal_Patch\WoodenPedestal_TechPatch\WoodenPedestalTechMod.cs" />
+    <Compile Include="WoodenPedestal_Patch\WoodenPedestal_UIPatch\WoodenPedestalUI.cs" />
+    <Compile Include="WoodenShelfConfig.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

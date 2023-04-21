@@ -1,79 +1,82 @@
-﻿using TUNING;
+﻿using System;
+using TUNING;
 using UnityEngine;
 
-namespace WoodenSetFurniture
+namespace Custom_Furniture
 {
-    public class SimpleFireplaceConfig : IBuildingConfig
-    {
-        public const string ID = "SimpleFireplace";
+	// Token: 0x02000007 RID: 7
+	public class SimpleFireplaceConfig : IBuildingConfig
+	{
+		// Token: 0x06000015 RID: 21 RVA: 0x00002728 File Offset: 0x00000928
+		public override void ConfigureBuildingTemplate(GameObject go, Tag prefab_tag)
+		{
+			EntityTemplateExtensions.AddOrGet<LoopingSounds>(go);
+			EntityTemplateExtensions.AddOrGet<MassiveHeatSink>(go);
+			EntityTemplateExtensions.AddOrGet<MinimumOperatingTemperature>(go).minimumTemperature = 100f;
+			PrimaryElement component = go.GetComponent<PrimaryElement>();
+			component.SetElement(-279785280, true);
+			component.Temperature = 294.15f;
+			Storage storage = EntityTemplateExtensions.AddOrGet<Storage>(go);
+			storage.capacityKg = 1000f;
+			storage.SetDefaultStoredItemModifiers(Storage.StandardSealedStorage);
+			storage.showInUI = true;
+			ManualDeliveryKG manualDeliveryKG = EntityTemplateExtensions.AddOrGet<ManualDeliveryKG>(go);
+			manualDeliveryKG.SetStorage(storage);
+			manualDeliveryKG.requestedItemTag = WoodLogConfig.TAG;
+			manualDeliveryKG.capacity = 300f;
+			manualDeliveryKG.refillMass = 30f;
+			manualDeliveryKG.choreTypeIDHash = Db.Get().ChoreTypes.MachineFetch.IdHash;
+			ElementConverter elementConverter = EntityTemplateExtensions.AddOrGet<ElementConverter>(go);
+			elementConverter.consumedElements = new ElementConverter.ConsumedElement[]
+			{
+				new ElementConverter.ConsumedElement(WoodLogConfig.TAG, 0.1f)
+			};
+			elementConverter.outputElements = new ElementConverter.OutputElement[]
+			{
+				new ElementConverter.OutputElement(0.015f, 1960575215, 312.5f, false, false, 0f, 0.5f, 1f, byte.MaxValue, 0)
+			};
+			ElementConsumer elementConsumer = EntityTemplateExtensions.AddOrGet<ElementConsumer>(go);
+			elementConsumer.elementToConsume = -1528777920;
+			elementConsumer.consumptionRate = 0.002f;
+			elementConsumer.consumptionRadius = 3;
+			elementConsumer.showInStatusPanel = true;
+			elementConsumer.sampleCellOffset = new Vector3(0f, 1f, 0f);
+			elementConsumer.isRequired = true;
+			Prioritizable.AddRef(go);
+		}
 
-        public override void ConfigureBuildingTemplate(GameObject go, Tag prefab_tag)
-        {
-            go.AddOrGet<LoopingSounds>();
-            go.AddOrGet<MassiveHeatSink>();
-            go.AddOrGet<MinimumOperatingTemperature>().minimumTemperature = 100f;
+		// Token: 0x06000016 RID: 22 RVA: 0x000028A4 File Offset: 0x00000AA4
+		public override BuildingDef CreateBuildingDef()
+		{
+			EffectorValues none = NOISE_POLLUTION.NONE;
+			BuildingDef buildingDef = BuildingTemplates.CreateBuildingDef("SimpleFireplace", 2, 3, "simple_fireplace_kanim", 30, 90f, BUILDINGS.CONSTRUCTION_MASS_KG.TIER5, MATERIALS.RAW_MINERALS, 1600f, 1, BUILDINGS.DECOR.BONUS.TIER0, none, 0.6f);
+			buildingDef.ThermalConductivity = 9.4f;
+			buildingDef.ExhaustKilowattsWhenActive = 18f;
+			buildingDef.SelfHeatKilowattsWhenActive = 6f;
+			buildingDef.LogicInputPorts = LogicOperationalController.CreateSingleInputPortList(new CellOffset(0, 0));
+			buildingDef.ViewMode = OverlayModes.Power.ID;
+			buildingDef.AudioCategory = "HollowMetal";
+			return buildingDef;
+		}
 
-            PrimaryElement component = go.GetComponent<PrimaryElement>();
-            component.SetElement(SimHashes.Gold);
-            component.Temperature = 294.15f;
+		// Token: 0x06000017 RID: 23 RVA: 0x0000293A File Offset: 0x00000B3A
+		public override void DoPostConfigureComplete(GameObject go)
+		{
+			EntityTemplateExtensions.AddOrGet<LogicOperationalController>(go);
+			EntityTemplateExtensions.AddOrGetDef<PoweredActiveController.Def>(go);
+		}
 
-            Storage storage = go.AddOrGet<Storage>();
-            storage.capacityKg = 1000f;
-            storage.SetDefaultStoredItemModifiers(Storage.StandardSealedStorage);
-            storage.showInUI = true;
+		// Token: 0x06000018 RID: 24 RVA: 0x0000294B File Offset: 0x00000B4B
+		public override void DoPostConfigurePreview(BuildingDef def, GameObject go)
+		{
+		}
 
-            ManualDeliveryKG local1 = go.AddOrGet<ManualDeliveryKG>();
-            local1.SetStorage(storage);
-            local1.RequestedItemTag = WoodLogConfig.TAG;
-            local1.capacity = 300f;
-            local1.refillMass = 30f;
-            local1.choreTypeIDHash = Db.Get().ChoreTypes.MachineFetch.IdHash;
+		// Token: 0x06000019 RID: 25 RVA: 0x0000294E File Offset: 0x00000B4E
+		public override void DoPostConfigureUnderConstruction(GameObject go)
+		{
+		}
 
-            ElementConverter converter = go.AddOrGet<ElementConverter>();
-            converter.consumedElements = new ElementConverter.ConsumedElement[] { new ElementConverter.ConsumedElement(WoodLogConfig.TAG, 0.1f) };
-            converter.outputElements = new ElementConverter.OutputElement[] { new ElementConverter.OutputElement(0.015f, SimHashes.CarbonDioxide, 312.5f, false, false, 0f, 0.5f, 1f, 0xff, 0) };
-
-            ElementConsumer local3 = go.AddOrGet<ElementConsumer>();
-            local3.elementToConsume = SimHashes.Oxygen;
-            local3.consumptionRate = 0.002f;
-            local3.consumptionRadius = 3;
-            local3.showInStatusPanel = true;
-            local3.sampleCellOffset = new Vector3(0f, 1f, 0f);
-            local3.isRequired = true;
-
-            Prioritizable.AddRef(go);
-        }
-
-        public override BuildingDef CreateBuildingDef()
-        {
-            EffectorValues noise = NOISE_POLLUTION.NONE;
-            BuildingDef def1 = BuildingTemplates.CreateBuildingDef(ID, 2, 3, "simple_fireplace_kanim", 30, 90f, BUILDINGS.CONSTRUCTION_MASS_KG.TIER5, MATERIALS.RAW_MINERALS, 1600f, BuildLocationRule.OnFloor, BUILDINGS.DECOR.BONUS.TIER0, noise, 0.6f);
-            def1.ThermalConductivity = 9.4f;
-            def1.ExhaustKilowattsWhenActive = 18f;
-            def1.SelfHeatKilowattsWhenActive = 6f;
-            def1.LogicInputPorts = LogicOperationalController.CreateSingleInputPortList(new CellOffset(0, 0));
-            def1.ViewMode = OverlayModes.Power.ID;
-            def1.AudioCategory = "HollowMetal";
-            return def1;
-        }
-
-        public override void DoPostConfigureComplete(GameObject go)
-        {
-            go.AddOrGet<LogicOperationalController>();
-            go.AddOrGetDef<PoweredActiveController.Def>();
-        }
-
-        public override void DoPostConfigurePreview(BuildingDef def, GameObject go)
-        {
-        }
-
-        public override void DoPostConfigureUnderConstruction(GameObject go)
-        {
-        }
-    }
-
+		// Token: 0x04000004 RID: 4
+		public const string ID = "SimpleFireplace";
+	}
 }
-
-/*
-
-*/

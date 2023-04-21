@@ -1,41 +1,46 @@
-﻿using UnityEngine;
+﻿using System;
 using TUNING;
+using UnityEngine;
 
-namespace WoodenSetFurniture
+namespace Custom_Furniture
 {
-    public class CozyBedConfig : IBuildingConfig
-    {
-        public static string ID = "CozyBed";
+	// Token: 0x02000002 RID: 2
+	public class CozyBedConfig : IBuildingConfig
+	{
+		// Token: 0x06000001 RID: 1 RVA: 0x00002050 File Offset: 0x00000250
+		public override void ConfigureBuildingTemplate(GameObject go, Tag prefab_tag)
+		{
+			EntityTemplateExtensions.AddOrGet<LoopingSounds>(go);
+			go.GetComponent<KPrefabID>().AddTag(RoomConstraints.ConstraintTags.Bed, false);
+			go.GetComponent<KPrefabID>().AddTag(RoomConstraints.ConstraintTags.LuxuryBed, false);
+		}
 
-        public override void ConfigureBuildingTemplate(GameObject go, Tag prefab_tag)
-        {
-            go.AddOrGet<LoopingSounds>();
-            go.GetComponent<KPrefabID>().AddTag(RoomConstraints.ConstraintTags.BedType, false);
-            go.GetComponent<KPrefabID>().AddTag(RoomConstraints.ConstraintTags.LuxuryBedType, false);
-        }
+		// Token: 0x06000002 RID: 2 RVA: 0x00002080 File Offset: 0x00000280
+		public override BuildingDef CreateBuildingDef()
+		{
+			float[] array = new float[] { 120f, 200f, 40f };
+			string[] array2 = new string[] { "RefinedMetal", "BuildingWood", "BuildingFiber" };
+			EffectorValues none = NOISE_POLLUTION.NONE;
+			BuildingDef buildingDef = BuildingTemplates.CreateBuildingDef(CozyBedConfig.ID, 4, 2, "cozy_bed_kanim", 10, 10f, array, array2, 1600f, 1, BUILDINGS.DECOR.BONUS.TIER2, none, 0.3f);
+			buildingDef.Overheatable = false;
+			buildingDef.AudioCategory = "Metal";
+			return buildingDef;
+		}
 
-        public override BuildingDef CreateBuildingDef()
-        {
-            float[] singleArray1 = new float[] { 120f, 200f, 40 };
-            string[] textArray1 = new string[] { "RefinedMetal", "BuildingWood", "BuildingFiber" };
+		// Token: 0x06000003 RID: 3 RVA: 0x0000210C File Offset: 0x0000030C
+		public override void DoPostConfigureComplete(GameObject go)
+		{
+			go.GetComponent<KAnimControllerBase>().initialAnim = "off";
+			Bed bed = EntityTemplateExtensions.AddOrGet<Bed>(go);
+			bed.effects = new string[] { "LuxuryBedStamina", "BedHealth" };
+			bed.workLayer = 21;
+			Sleepable sleepable = EntityTemplateExtensions.AddOrGet<Sleepable>(go);
+			sleepable.overrideAnims = new KAnimFile[] { Assets.GetAnim("anim_sleep_bed_kanim") };
+			sleepable.workLayer = 21;
+			EntityTemplateExtensions.AddOrGet<Ownable>(go).slotID = Db.Get().AssignableSlots.Bed.Id;
+		}
 
-            EffectorValues nONE = NOISE_POLLUTION.NONE;
-            BuildingDef def1 = BuildingTemplates.CreateBuildingDef(ID, 4, 2, "cozy_bed_kanim", 10, 10f, singleArray1, textArray1, 1600f, BuildLocationRule.OnFloor, BUILDINGS.DECOR.BONUS.TIER2, nONE, 0.3f);
-            def1.Overheatable = false;
-            def1.AudioCategory = "Metal";
-            return def1;
-        }
-
-        public override void DoPostConfigureComplete(GameObject go)
-        {
-            go.GetComponent<KAnimControllerBase>().initialAnim = "off";
-            Bed bed = go.AddOrGet<Bed>();
-            bed.effects = new string[] { "LuxuryBedStamina", "BedHealth" };
-            bed.workLayer = Grid.SceneLayer.BuildingFront;
-            Sleepable sleepable = go.AddOrGet<Sleepable>();
-            sleepable.overrideAnims = new KAnimFile[] { Assets.GetAnim("anim_sleep_bed_kanim") };
-            sleepable.workLayer = Grid.SceneLayer.BuildingFront;
-            go.AddOrGet<Ownable>().slotID = Db.Get().AssignableSlots.Bed.Id;
-        }
-    }
+		// Token: 0x04000001 RID: 1
+		public static string ID = "CozyBed";
+	}
 }

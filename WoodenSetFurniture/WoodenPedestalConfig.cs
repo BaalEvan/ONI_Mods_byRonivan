@@ -1,47 +1,49 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TUNING;
 using UnityEngine;
 
-namespace WoodenSetFurniture
+namespace Custom_Furniture
 {
-    public class WoodenPedestalConfig : IBuildingConfig
-    {
-        public const string ID = "WoodenPedestal";
+	// Token: 0x0200000B RID: 11
+	public class WoodenPedestalConfig : IBuildingConfig
+	{
+		// Token: 0x06000028 RID: 40 RVA: 0x00002FE8 File Offset: 0x000011E8
+		public override void ConfigureBuildingTemplate(GameObject go, Tag prefab_tag)
+		{
+			Storage.StoredItemModifier[] array = new Storage.StoredItemModifier[] { 2, 3 };
+			EntityTemplateExtensions.AddOrGet<Storage>(go).SetDefaultStoredItemModifiers(new List<Storage.StoredItemModifier>(array));
+			Prioritizable.AddRef(go);
+			SingleEntityReceptacle singleEntityReceptacle = EntityTemplateExtensions.AddOrGet<SingleEntityReceptacle>(go);
+			singleEntityReceptacle.AddDepositTag(GameTags.PedestalDisplayable);
+			singleEntityReceptacle.occupyingObjectRelativePosition = new Vector3(0f, 1.2f, -1f);
+			EntityTemplateExtensions.AddOrGet<DecorProvider>(go);
+			EntityTemplateExtensions.AddOrGet<ItemPedestal>(go);
+			go.GetComponent<KPrefabID>().AddTag(GameTags.Decoration, false);
+		}
 
-        public override void ConfigureBuildingTemplate(GameObject go, Tag prefab_tag)
-        {
-            Storage.StoredItemModifier[] collection = new Storage.StoredItemModifier[] { Storage.StoredItemModifier.Seal, Storage.StoredItemModifier.Preserve };
-            go.AddOrGet<Storage>().SetDefaultStoredItemModifiers(new List<Storage.StoredItemModifier>(collection));
-            Prioritizable.AddRef(go);
-            SingleEntityReceptacle local1 = go.AddOrGet<SingleEntityReceptacle>();
-            local1.AddDepositTag(GameTags.PedestalDisplayable);
-            local1.occupyingObjectRelativePosition = new Vector3(0f, 1.2f, -1f);
-            go.AddOrGet<DecorProvider>();
-            go.AddOrGet<ItemPedestal>();
-            go.GetComponent<KPrefabID>().AddTag(GameTags.Decoration, false);
+		// Token: 0x06000029 RID: 41 RVA: 0x0000306C File Offset: 0x0000126C
+		public override BuildingDef CreateBuildingDef()
+		{
+			float[] array = new float[] { 20f, 250f };
+			string[] array2 = new string[] { "RefinedMetal", "BuildingWood" };
+			EffectorValues none = NOISE_POLLUTION.NONE;
+			BuildingDef buildingDef = BuildingTemplates.CreateBuildingDef("WoodenPedestal", 1, 2, "wooden_pedestal_kanim", 10, 30f, array, array2, 800f, 1, BUILDINGS.DECOR.BONUS.TIER1, none, 0.2f);
+			buildingDef.DefaultAnimState = "pedestal";
+			buildingDef.Floodable = false;
+			buildingDef.Overheatable = false;
+			buildingDef.ViewMode = OverlayModes.Decor.ID;
+			buildingDef.AudioCategory = "Glass";
+			buildingDef.AudioSize = "small";
+			return buildingDef;
+		}
 
-        }
+		// Token: 0x0600002A RID: 42 RVA: 0x0000311B File Offset: 0x0000131B
+		public override void DoPostConfigureComplete(GameObject go)
+		{
+		}
 
-        public override BuildingDef CreateBuildingDef()
-        {
-            float[] singleArray1 = new float[] { 20f, 250f };
-            string[] textArray1 = new string[] { "RefinedMetal", "BuildingWood" };
-            EffectorValues nONE = NOISE_POLLUTION.NONE;
-            BuildingDef def1 = BuildingTemplates.CreateBuildingDef(ID, 1, 2, "wooden_pedestal_kanim", 10, 30f, singleArray1, textArray1, 800f, BuildLocationRule.OnFloor, BUILDINGS.DECOR.BONUS.TIER1, nONE, 0.2f);
-            def1.DefaultAnimState = "pedestal";
-            def1.Floodable = false;
-            def1.Overheatable = false;
-            def1.ViewMode = OverlayModes.Decor.ID;
-            def1.AudioCategory = "Glass";
-            def1.AudioSize = "small";
-            return def1;
-        }
-
-        public override void DoPostConfigureComplete(GameObject go)
-        {
-        }
-    }
-
-
+		// Token: 0x04000008 RID: 8
+		public const string ID = "WoodenPedestal";
+	}
 }
-
